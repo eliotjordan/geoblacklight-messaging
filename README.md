@@ -96,10 +96,10 @@ defaults: &defaults
 	```json
 	{
 	  "id": "princeton-abc123",
-	  "event": "DELETED",
+	  "event": "DELETED"
 	}
 	```
 	
 ## Thanks
 
-This gem was based on work done by @tpendragon for [Plum](https://github.com/pulibrary/plum) and [Pomegranate](https://github.com/pulibrary/pomegranate).
+This gem was based on work done by [@tpendragon](https://github.com/tpendragon) for [Plum](https://github.com/pulibrary/plum) and [Pomegranate](https://github.com/pulibrary/pomegranate).
