@@ -50,3 +50,4 @@ build-iPhoneSimulator/
 .rvmrc
 
 .internal_test_app
+Gemfile.lock
