@@ -1,12 +1,17 @@
 # GeoblacklightMessaging
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/geoblacklight_messaging`. To experiment with that code, run `bin/console` for an interactive prompt.
+[![Build Status](https://travis-ci.org/eliotjordan/geoblacklight-messaging.svg?branch=master)](https://travis-ci.org/eliotjordan/geoblacklight-messaging) | [![Coverage Status](https://img.shields.io/coveralls/eliotjordan/geoblacklight-messaging.svg)](https://coveralls.io/r/eliotjordan/geoblacklight-messaging?branch=coveralls) | [![Gem Version](https://img.shields.io/gem/v/geoblacklight_messaging.svg)](https://github.com/eliotjordan/geoblacklight-messaging/releases)
 
-TODO: Delete this and the text above, and describe your gem
+GeoblacklightMessaging is a plugin that enables Geoblacklight applications to synchronize with external services using a RabbitMQ exchange. The plugin subscribes to events on the exchange and updates Geoblacklight records when they're created, updated, or deleted.
+
+
+## Dependencies
+
+- [RabbitMQ](https://www.rabbitmq.com/download.html)
 
 ## Installation
 
-Add this line to your application's Gemfile:
+Add this line to your Geoblacklight application's Gemfile:
 
 ```ruby
 gem 'geoblacklight_messaging'
@@ -15,27 +20,82 @@ gem 'geoblacklight_messaging'
 And then execute:
 
     $ bundle
+    
+Run generator:
 
-Or install it yourself as:
+```
+$ rails generate geoblacklight_messaging:install
+```
 
-    $ gem install geoblacklight_messaging
+Configure the events settings in `config/messaging.yml`:
+
+```yaml
+defaults: &defaults
+  events:
+    server: <%= ENV['RABBIT_SERVER'] || 'amqp://localhost:5672' %>
+    exchange:
+      geoblacklight: 'gbl_events'
+```
 
 ## Usage
 
-TODO: Write usage instructions here
+1. Start RabbitMQ:
 
-## Development
+   ```
+   $ rabbitmq-server
+   ```
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+1. Run your geoblacklight application:
+	
+	```
+	$ rake geoblacklight:server
+	```
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+1. In a separate console, run:
+   
+   ```
+   $ WORKERS=GeoblacklightMessaging::GeoblacklightEventHandler rake sneakers:run
+   ```
 
-## Contributing
+1. If the RabbitMQ Management Plugin is installed, you can inspect the exchange and publish messages manually using the web interface at `http://localhost:15672/`.
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/geoblacklight_messaging. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+## Message Format
+
+### Create
+
+1. The event workers expect a json create message in the following format:
+
+	```json
+	{
+	  "id": "princeton-abc123",
+	  "event": "CREATED",
+	  "doc": { "layer_slug_s": "princeton-abc123", "dc_title_s": "Cool Map", ... }
+	}
+	```
+
+1. `id` is the record's unique key. `layer_slug_s` in this case.
+1. `doc` is the unescaped geoblacklight json document.
 
 
-## License
+### Update
 
-The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
+1. Update is similar to create.
 
+	```json
+	{
+	  "id": "princeton-abc123",
+	  "event": "UPDATED",
+	  "doc": { "layer_slug_s": "princeton-abc123", "dc_title_s": "New Map Name", ... }
+	}
+	```
+
+### Delete
+
+1. No doc value is needed for delete:
+
+	```json
+	{
+	  "id": "princeton-abc123",
+	  "event": "DELETED",
+	}
+	```
