@@ -99,3 +99,7 @@ defaults: &defaults
 	  "event": "DELETED",
 	}
 	```
+	
+## Thanks
+
+This gem was based on work done by @tpendragon for [Plum](https://github.com/pulibrary/plum) and [Pomegranate](https://github.com/pulibrary/pomegranate).
