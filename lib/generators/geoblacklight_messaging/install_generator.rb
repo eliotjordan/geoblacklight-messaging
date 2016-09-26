@@ -3,7 +3,7 @@ require 'rails/generators'
 module GeoblacklightMessaging
   class Install < Rails::Generators::Base
     source_root File.expand_path('../templates', __FILE__)
-    
+
     def install_messaging_config
       config_file_path = 'config/messaging.yml'
       initializer_file_path = 'config/initializers/messaging_config.rb'

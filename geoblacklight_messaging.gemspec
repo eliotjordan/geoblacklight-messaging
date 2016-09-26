@@ -6,18 +6,18 @@ require 'geoblacklight_messaging/version'
 Gem::Specification.new do |spec|
   spec.name          = 'geoblacklight_messaging'
   spec.version       = GeoblacklightMessaging::VERSION
-  spec.authors       = ["Eliot Jordan"]
-  spec.email         = ["eliot.jordan@gmail.com"]
+  spec.authors       = ['Eliot Jordan']
+  spec.email         = ['eliot.jordan@gmail.com']
 
-  spec.summary       = %q{RabbitMQ messaging for Geoblacklight.}
-  spec.description   = %q{RabbitMQ messaging for Geoblacklight.}
-  spec.homepage      = "https://github.com/eliotjordan/geoblacklight-messaging"
-  spec.license       = "APACHE2"
+  spec.summary       = 'RabbitMQ messaging for Geoblacklight.'
+  spec.description   = 'RabbitMQ messaging for Geoblacklight.'
+  spec.homepage      = 'https://github.com/eliotjordan/geoblacklight-messaging'
+  spec.license       = 'APACHE2'
 
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|
     f.match(%r{^(test|spec|features)/})
   end
-  spec.require_paths = ["lib"]
+  spec.require_paths = ['lib']
 
   spec.add_dependency 'sneakers'
 
