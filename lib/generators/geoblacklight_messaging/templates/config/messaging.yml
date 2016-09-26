@@ -1,0 +1,17 @@
+defaults: &defaults
+  events:
+    server: <%= ENV['RABBIT_SERVER'] || 'amqp://localhost:5672' %>
+    exchange:
+      geoblacklight: 'gbl_events'
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+production:
+  <<: *defaults
+
+staging:
+  <<: *defaults
