@@ -1,10 +1,10 @@
-require 'rails_helper'
+require 'spec_helper'
 
-RSpec.describe GeoblacklightEventProcessor do
+RSpec.describe GeoblacklightMessaging::GeoblacklightEventProcessor do
   subject(:processor) { described_class.new(event) }
   let(:resource) { Blacklight.default_index.connection.get('select', params: params) }
-  let(:params) { { q: "uuid:#{RSolr.solr_escape(id)}" } }
-  let(:id) { 'http://purl.stanford.edu/dp018hs9766' }
+  let(:params) { { q: "layer_slug_s:#{RSolr.solr_escape(id)}" } }
+  let(:id) { 'stanford-dp018hs9766' }
   let(:title) { 'geo title' }
   let(:event) do
     {
@@ -15,7 +15,7 @@ RSpec.describe GeoblacklightEventProcessor do
   end
   let(:geoblacklight_document) do
     {
-      'uuid' => id,
+      'layer_slug_s' => id,
       'dc_title_s' => title
     }
   end
@@ -39,9 +39,9 @@ RSpec.describe GeoblacklightEventProcessor do
     let(:type) { 'CREATED' }
     it 'adds the geoblacklight document' do
       expect(processor.process).to eq true
-      params = { q: "uuid:#{RSolr.solr_escape(id)}" }
+      params = { q: "layer_slug_s:#{RSolr.solr_escape(id)}" }
       resource = Blacklight.default_index.connection.get('select', params: params)
-      expect(resource['response']['docs'].first['uuid']).to eq(id)
+      expect(resource['response']['docs'].first['layer_slug_s']).to eq(id)
     end
   end
 

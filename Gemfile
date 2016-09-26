@@ -2,6 +2,17 @@ source 'https://rubygems.org'
 
 # Specify your gem's dependencies in geoblacklight_messaging.gemspec
 gemspec
+
+group :development, :test do
+  # Peg simplecov to < 0.8 until this is resolved:
+  # https://github.com/colszowka/simplecov/issues/281
+  gem 'simplecov', '~> 0.7.1', require: false
+  gem 'coveralls', require: false
+  gem 'rubocop', '0.39.0', require: false
+  gem 'rubocop-rspec', '1.4.1', require: false
+  gem 'byebug', require: false
+end
+
 # BEGIN ENGINE_CART BLOCK
 # engine_cart: 1.0.1
 # engine_cart stanza: 0.10.0

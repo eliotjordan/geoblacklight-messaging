@@ -1,10 +1,11 @@
-require 'rails_helper'
+require 'spec_helper'
 
-RSpec.describe GeoblacklightEventHandler do
+RSpec.describe GeoblacklightMessaging::GeoblacklightEventHandler do
   subject(:handler) { described_class.new }
 
   describe '#work' do
-    let(:processor) { instance_double(GeoblacklightEventProcessor, process: process) }
+    let(:event_processor) { GeoblacklightMessaging::GeoblacklightEventProcessor }
+    let(:processor) { instance_double(event_processor, process: process) }
     let(:process) {}
     let(:msg) do
       {
@@ -21,10 +22,10 @@ RSpec.describe GeoblacklightEventHandler do
       let(:process) { true }
 
       it 'sends the message to the GeoblacklightEventProcessor as a hash' do
-        allow(GeoblacklightEventProcessor).to receive(:new).and_return(processor)
+        allow(event_processor).to receive(:new).and_return(processor)
         handler.work(msg.to_json)
         expect(processor).to have_received(:process)
-        expect(GeoblacklightEventProcessor).to have_received(:new).with(msg)
+        expect(event_processor).to have_received(:new).with(msg)
         expect(handler).to have_received(:ack!)
       end
     end
@@ -33,10 +34,10 @@ RSpec.describe GeoblacklightEventHandler do
       let(:process) { false }
 
       it 'rejects the message' do
-        allow(GeoblacklightEventProcessor).to receive(:new).and_return(processor)
+        allow(event_processor).to receive(:new).and_return(processor)
         handler.work(msg.to_json)
         expect(processor).to have_received(:process)
-        expect(GeoblacklightEventProcessor).to have_received(:new).with(msg)
+        expect(event_processor).to have_received(:new).with(msg)
         expect(handler).to have_received(:reject!)
       end
     end

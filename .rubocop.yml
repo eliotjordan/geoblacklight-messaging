@@ -11,6 +11,8 @@ AllCops:
 
 Metrics/LineLength:
   Max: 100
+  Exclude:
+  - 'Rakefile'
 
 Style/Documentation:
   Enabled: false
